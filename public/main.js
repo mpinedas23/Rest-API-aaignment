@@ -1,64 +1,26 @@
 console.log("Rest API assignment");
 
-// Your valid NASA API key
-const apiKey = 'DYx2toeby0ZcxYJ04PcMKtIhXgB8kGlNuudhH1uO';
-const baseURL = 'https://api.nasa.gov/planetary/apod';
 
-// Function to get APOD data based on user input or default to today
-async function getData() {
-  // Simulate user input for the date (in place of an HTML input element)
-  let dateInput = prompt("Enter a date (YYYY-MM-DD) for the APOD, or leave blank for today:");
+let searchButton = document.querySelector("#search")
 
-  // If no date is provided, default to today's date
-  if (!dateInput) {
-    let today = new Date();
-    let year = today.getFullYear();
-    let month = today.getMonth() + 1;  // getMonth() is zero-based
-    let day = today.getDate();
-    
-    // Ensure month and day are 2 digits
-    if (month < 10) month = '0' + month;
-    if (day < 10) day = '0' + day;
+searchButton.addEventListener("click",()=>{
+  console.log("button pressed")
+  useApiRequest()
+})
+async function useApiRequest() {
+  let API_KEY = "zfxMjQ8TxNyZnnla927UjbnFydB3WERxp0iCjfkH"; //save API key
+  let response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`); //make a request
+  console.log(response)
 
-    dateInput = `${year}-${month}-${day}`;
-  }
+  let data  = await response.json()  //get the data
+  console.log(data)
 
-  // Construct the API URL with the provided or default date
-  let finalURL = `${baseURL}?date=${dateInput}&api_key=${apiKey}`;
+  useApiData(data)
 
-  try {
-    // Fetch the data from NASA APOD API
-    let result = await fetch(finalURL);
-
-    // Check if the fetch was successful
-    if (!result.ok) {
-      console.error("HTTP Error: ", result.status);
-      return;
-    }
-
-    // Parse the JSON response
-    let jsonRes = await result.json();
-
-    // Debug: Log the entire response to inspect its structure
-    console.log("Full API Response:", jsonRes);
-
-    // Log specific fields from the API response
-    console.log(`Title: ${jsonRes.title || "No title available"}`);
-    console.log(`Date: ${jsonRes.date || "No date available"}`);
-    console.log(`Explanation: ${jsonRes.explanation || "No explanation available"}`);
-
-    // Display URL based on media type (image or video)
-    if (jsonRes.media_type === "image") {
-      console.log(`Image URL: ${jsonRes.url || "No image available"}`);
-    } else if (jsonRes.media_type === "video") {
-      console.log(`Video URL: ${jsonRes.url || "No video available"}`);
-    } else {
-      console.log("Unknown media type");
-    }
-  } catch (error) {
-    console.error("Error fetching the APOD: ", error);
-  }
 }
 
-// Call the function to get the data
-getData();
+
+function useApiData(data){
+ document.querySelector("#content").innerHTML += data.explanation
+ document.querySelector("#content").innerHTML += `<img src="${data.url}">`
+}
