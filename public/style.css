@@ -1,0 +1,14 @@
+body {
+    font-family: "Afacad Flux", sans-serif;
+   
+    margin: 20px;
+    background-color: #92C4FF;
+    color: #333;
+}
+
+button{
+    border-radius: 10px;
+    font-family: "Afacad Flux", sans-serif;
+    font-size: medium;
+    background-color: rgb(232, 135, 154);
+}
